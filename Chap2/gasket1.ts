@@ -1,5 +1,4 @@
-"use strict";
-
+import { initShaders } from "../Common/initShaders-module";
 import { add, flatten, scale, vec2 } from "../Common/MV-module";
 import WebGLUtils from "../Common/webgl-utils-module";
 

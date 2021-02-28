@@ -57,6 +57,10 @@
  * visible.
  */
 
+/**
+ * @type {any}
+ */
+var WebGLUtils;
 WebGLUtils = function () {
 
     /**
