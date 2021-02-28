@@ -1,3 +1,9 @@
+# To make a new program
+
+- Add a new entrypoint in `webpack.config.js`
+- Add a new html file that uses the built bundle in the scripts tag
+- Add a new plugin in the plugins array that references that html file
+
 # INTERACTIVE COMPUTER GRAPHICS
 ## A TOP-DOWN APPROACH WITH SHADER-BASED OPENGL®
 
