@@ -57,10 +57,7 @@
  * visible.
  */
 
-/**
- * @type {any}
- */
-var WebGLUtils;
+var WebGLUtils: { setupWebGL: (canvas: HTMLCanvasElement, opt_attribs?: unknown) => WebGLRenderingContext | undefined };
 WebGLUtils = function () {
 
     /**
@@ -69,7 +66,7 @@ WebGLUtils = function () {
      *        canvas.
      * @return {string} The html.
      */
-    var makeFailHTML = function (msg) {
+    var makeFailHTML = function (msg: string) {
         return '' +
             '<table style="background-color: #8CE; width: 100%; height: 100%;"><tr>' +
             '<td align="center">' +
@@ -105,10 +102,11 @@ WebGLUtils = function () {
      *     creation attributes you want to pass in.
      * @return {WebGLRenderingContext} The created context.
      */
-    var setupWebGL = function (canvas, opt_attribs) {
-        function showLink(str) {
+    var setupWebGL = function (canvas: HTMLCanvasElement, opt_attribs?: unknown): WebGLRenderingContext {
+        function showLink(str: string) {
             var container = canvas.parentNode;
             if (container) {
+                // @ts-ignore
                 container.innerHTML = makeFailHTML(str);
             }
         };
@@ -122,7 +120,7 @@ WebGLUtils = function () {
         if (!context) {
             showLink(OTHER_PROBLEM);
         }
-        return context;
+        return context as WebGLRenderingContext;
     };
 
     /**
@@ -131,7 +129,7 @@ WebGLUtils = function () {
      *     from. If one is not passed in one will be created.
      * @return {!WebGLContext} The created context.
      */
-    var create3DContext = function (canvas, opt_attribs) {
+    var create3DContext = function (canvas: HTMLCanvasElement, opt_attribs: unknown) {
         var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
         var context = null;
         for (var ii = 0; ii < names.length; ++ii) {
@@ -154,12 +152,17 @@ WebGLUtils = function () {
 /**
  * Provides requestAnimationFrame in a cross browser way.
  */
+// @ts-ignore
 window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
+        // @ts-ignore
         window.mozRequestAnimationFrame ||
+        // @ts-ignore
         window.oRequestAnimationFrame ||
+        // @ts-ignore
         window.msRequestAnimationFrame ||
+        // @ts-ignore
         function (/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
             window.setTimeout(callback, 1000 / 60);
         };

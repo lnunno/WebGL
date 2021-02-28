@@ -1,8 +1,9 @@
 import { initShaders } from "../Common/initShaders-module";
+import { initShadersTs } from "../Common/initShadersTs";
 import { add, flatten, scale, vec2 } from "../Common/MV-module";
 import WebGLUtils from "../Common/webgl-utils-module";
 
-var gl: any;
+var gl: WebGLRenderingContext;
 var points;
 
 var NumPoints = 5000;
@@ -54,8 +55,26 @@ window.onload = function init() {
     gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
     //  Load shaders and initialize attribute buffers
+    const vertexShaderSource = `
+attribute vec4 vPosition;
 
-    var program = initShaders(gl, "vertex-shader", "fragment-shader");
+void
+main()
+{
+	gl_PointSize = 1.0;
+    gl_Position = vPosition;
+}
+`;
+    const fragmentShaderSource = `
+precision mediump float;
+
+void
+main()
+{
+    gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+}
+`;
+    const program = initShadersTs(gl, vertexShaderSource, fragmentShaderSource);
     gl.useProgram(program);
 
     // Load the data into the GPU
