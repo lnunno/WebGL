@@ -1,3 +1,11 @@
+# To build
+
+Install all the dependencies and then run
+
+```sh
+yarn run build
+```
+
 # To make a new program
 
 - Add a new entrypoint in `webpack.config.js`
