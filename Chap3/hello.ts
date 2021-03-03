@@ -1,9 +1,13 @@
 import { initShadersTs } from "../Common/initShadersTs";
-import { flatten, vec2 } from "../Common/MV-module";
 import WebGLUtils from "../Common/webgl-utils-module";
+import { glMatrix, vec2 } from "gl-matrix";
+import { flatten } from "lodash";
+
+// Use normal arrays and then convert to native arrays when we pass to WebGL.
+glMatrix.setMatrixArrayType(Array);
 
 let gl: WebGLRenderingContext | undefined;
-let vertices;
+let vertices: number[][];
 
 window.onload = function init() {
   const canvas: HTMLCanvasElement = document.getElementById("gl-canvas") as HTMLCanvasElement;
@@ -44,26 +48,23 @@ void main()
   }
   gl.useProgram(program);
 
-  vertices = new Float32Array([
-    0,
-    0.5,
-    0, // Vertice #1
-    -0.5,
-    -0.5,
-    0, // Vertice #2
-    0.5,
-    -0.5,
-    0, // Vertice #3
-  ]);
+  vertices = [
+    vec2.fromValues(0, 0) as [number, number],
+    vec2.fromValues(-1, -1) as [number, number],
+    vec2.fromValues(1, -1) as [number, number],
+  ];
+
+  const inputData = flatten(vertices);
+  const nativeArray = new Float32Array(inputData);
 
   // Load the data into the GPU
   const bufferId = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
-  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, nativeArray, gl.STATIC_DRAW);
 
   // Associate our shader variables with our data buffer
   const vPosition = gl.getAttribLocation(program, "vPosition");
-  gl.vertexAttribPointer(vPosition, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(vPosition);
 
   render();
@@ -74,6 +75,7 @@ function render() {
     console.error("Didn't initialize rendering context before using");
     return;
   }
+  gl.clearColor(0, 0, 0, 1);
   gl.clear(gl.COLOR_BUFFER_BIT);
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  gl.drawArrays(gl.TRIANGLES, 0, vertices.length);
 }
